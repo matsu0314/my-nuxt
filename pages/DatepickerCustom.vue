@@ -12,14 +12,18 @@ import("flowbite-datepicker").then((module) => {
 
 const field_1 = ref("");
 const field_2 = ref("");
-const startDate = ref("開始日");
-const deadline = ref("終了日");
+const startDate = ref("カレンダー１");
+const deadline = ref("カレンダー２");
 
 onMounted(async () => {
   useFlowbite(() => {
     // カレンダー開始日と期限の要素を取得
-    const dateRangePicker = document.querySelector(
-      "#date-range-picker"
+    const datepickerStartDate = document.querySelector(
+      "#datepicker-startDate"
+    ) as HTMLElement;
+
+    const datepickerDeadLine = document.querySelector(
+      "#datepicker-deadline"
     ) as HTMLElement;
 
     // カレンダーオプション
@@ -31,17 +35,23 @@ onMounted(async () => {
       minDate: null,
       orientation: "bottom",
       buttons: true,
-      autoSelectToday: 1, // 今日の日付を選択
+      autoSelectToday: 0, // 今日の日付を選択
       title: null,
       language: "ja",
-      rangePicker: true, // 選択範囲のカレンダーを表示
+      rangePicker: false, // 選択範囲のカレンダーを表示
       onShow: () => {},
       onHide: () => {},
     };
 
     // 開始日と期限のカレンダーを表示
-    new Datepicker(dateRangePicker, options, {
-      id: `date-range-picker`,
+
+    new Datepicker(datepickerStartDate, options, {
+      id: `datepicker-statDate`,
+      override: true,
+    });
+
+    new Datepicker(datepickerDeadLine, options, {
+      id: `datepicker-deadLine`,
       override: true,
     });
 
@@ -104,9 +114,9 @@ onMounted(async () => {
   <div>
     <main class="mb-32">
       <h1 class="mb-2 w-full max-w-2xl mx-auto my-2 text-3xl font-bold">
-        サンプルフォーム(rangePicker)
+        サンプルフォーム(custom)
       </h1>
-      <p class="mb-8 w-full max-w-2xl mx-auto my-12 ">rangePickerオプションで期間を指定できるカレンダーを設置</p>
+      <p class="mb-8 w-full max-w-2xl mx-auto my-12 ">カレンダーを２つ設置</p>
       <section class="mx-auto mb-8 w-full max-w-2xl">
         <h2
           class="mb-4 text-xl font-semibold text-gray-800 dark:border-gray-600 dark:text-white"
@@ -150,7 +160,7 @@ onMounted(async () => {
         >
           DatePicker
         </h2>
-        <div id="date-range-picker" class="flex items-center">
+        <div class="flex items-center">
           <div class="relative">
             <div
               class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none"
@@ -173,7 +183,7 @@ onMounted(async () => {
               v-model="startDate"
               type="text"
               class="datepicker bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="開始日を選択してください"
+              placeholder="日付を選択してください"
             />
           </div>
           <span class="mx-4 text-gray-500">to</span>
@@ -199,7 +209,7 @@ onMounted(async () => {
               v-model="deadline"
               type="text"
               class="datepicker bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="終了日を選択してください"
+              placeholder="日付を選択してください"
             />
           </div>
         </div>

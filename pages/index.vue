@@ -28,93 +28,98 @@
         <div
           class="mb-4 w-auto rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
         >
-          <a
-            href="/"
+          <NuxtLink
+            to="/"
             class="block w-full cursor-pointer border-b border-gray-200 px-4 py-2 hover:bg-gray-100 hover:text-blue-700 focus:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:text-white dark:focus:ring-gray-500"
-            >Home</a
+            >Home</NuxtLink
           >
-          <a
-            href="/events"
+          <NuxtLink
+            to="/events"
             class="block w-full cursor-pointer border-b border-gray-200 px-4 py-2 hover:bg-gray-100 hover:text-blue-700 focus:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:text-white dark:focus:ring-gray-500"
-            >Data attribute events</a
+            >Data attribute events</NuxtLink
           >
-          <a
-            href="/accordion"
+          <NuxtLink
+            to="/accordion"
             class="block w-full cursor-pointer border-b border-gray-200 px-4 py-2 hover:bg-gray-100 hover:text-blue-700 focus:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:text-white dark:focus:ring-gray-500"
-            >Accordion</a
+            >Accordion</NuxtLink
           >
-          <a
-            href="/carousel"
+          <NuxtLink
+            to="/carousel"
             class="block w-full cursor-pointer border-b border-gray-200 px-4 py-2 hover:bg-gray-100 hover:text-blue-700 focus:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:text-white dark:focus:ring-gray-500"
-            >Carousel</a
+            >Carousel</NuxtLink
           >
-          <A
-            href="/modal"
+          <NuxtLink
+            to="/modal"
             class="block w-full cursor-pointer border-b border-gray-200 px-4 py-2 hover:bg-gray-100 hover:text-blue-700 focus:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:text-white dark:focus:ring-gray-500"
-            >Modal</A
+            >Modal</NuxtLink
           >
-          <A
-            href="/collapse"
+          <NuxtLink
+            to="/collapse"
             class="block w-full cursor-pointer border-b border-gray-200 px-4 py-2 hover:bg-gray-100 hover:text-blue-700 focus:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:text-white dark:focus:ring-gray-500"
-            >Collapse</A
+            >Collapse</NuxtLink
           >
-          <A
-            href="/dial"
+          <NuxtLink
+            to="/dial"
             class="block w-full cursor-pointer border-b border-gray-200 px-4 py-2 hover:bg-gray-100 hover:text-blue-700 focus:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:text-white dark:focus:ring-gray-500"
-            >Speed Dial</A
+            >Speed Dial</NuxtLink
           >
-          <A
-            href="/dismiss"
+          <NuxtLink
+            to="/dismiss"
             class="block w-full cursor-pointer border-b border-gray-200 px-4 py-2 hover:bg-gray-100 hover:text-blue-700 focus:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:text-white dark:focus:ring-gray-500"
-            >Dismiss</A
+            >Dismiss</NuxtLink
           >
-          <A
-            href="/drawer"
+          <NuxtLink
+            to="/drawer"
             class="block w-full cursor-pointer border-b border-gray-200 px-4 py-2 hover:bg-gray-100 hover:text-blue-700 focus:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:text-white dark:focus:ring-gray-500"
-            >Drawer</A
+            >Drawer</NuxtLink
           >
-          <A
-            href="/dropdown"
+          <NuxtLink
+            to="/dropdown"
             class="block w-full cursor-pointer border-b border-gray-200 px-4 py-2 hover:bg-gray-100 hover:text-blue-700 focus:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:text-white dark:focus:ring-gray-500"
-            >Dropdown</A
+            >Dropdown</NuxtLink
           >
-          <A
-            href="/popover"
+          <NuxtLink
+            to="/popover"
             class="block w-full cursor-pointer border-b border-gray-200 px-4 py-2 hover:bg-gray-100 hover:text-blue-700 focus:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:text-white dark:focus:ring-gray-500"
-            >Popover</A
+            >Popover</NuxtLink
           >
-          <A
-            href="/tabs"
+          <NuxtLink
+            to="/tabs"
             class="block w-full cursor-pointer border-b border-gray-200 px-4 py-2 hover:bg-gray-100 hover:text-blue-700 focus:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:text-white dark:focus:ring-gray-500"
-            >Tabs</A
+            >Tabs</NuxtLink
           >
-          <A
-            href="/tooltip"
+          <NuxtLink
+            to="/tooltip"
             class="block w-full cursor-pointer border-b border-gray-200 px-4 py-2 hover:bg-gray-100 hover:text-blue-700 focus:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:text-white dark:focus:ring-gray-500"
-            >Tooltip</A
+            >Tooltip</NuxtLink
           >
-          <A
-            href="/input-counter"
+          <NuxtLink
+            to="/input-counter"
             class="block w-full cursor-pointer border-b border-gray-200 px-4 py-2 hover:bg-gray-100 hover:text-blue-700 focus:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:text-white dark:focus:ring-gray-500"
-            >Input Counter</A
+            >Input Counter</NuxtLink
           >
-          <A
-            href="/datepicker"
+          <NuxtLink
+            to="/datepicker"
             class="block w-full cursor-pointer border-b border-gray-200 px-4 py-2 hover:bg-gray-100 hover:text-blue-700 focus:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:text-white dark:focus:ring-gray-500"
-            >Datepicker</A
+            >Datepicker</NuxtLink
           >
-          <A
-            href="/datepickerrange"
+          <NuxtLink
+            to="/datepickercustom"
             class="block w-full cursor-pointer border-b border-gray-200 px-4 py-2 hover:bg-gray-100 hover:text-blue-700 focus:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:text-white dark:focus:ring-gray-500"
-            >Datepicker(rangePicker)追加</A
+            >Datepicker(custom)追加</NuxtLink
+          >
+          <NuxtLink
+            to="/datepickerrange"
+            class="block w-full cursor-pointer border-b border-gray-200 px-4 py-2 hover:bg-gray-100 hover:text-blue-700 focus:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:text-white dark:focus:ring-gray-500"
+            >Datepicker(rangePicker)追加</NuxtLink
           >
         </div>
         <p class="mb-8">
           Learn more about
-          <a
-            href="https://flowbite.com/docs/getting-started/nuxt-js/"
+          <NuxtLink
+            to="https://flowbite.com/docs/getting-started/nuxt-js/"
             class="text-blue-600 hover:underline"
-            >Flowbite + Nuxt.js here</a
+            >Flowbite + Nuxt.js here</NuxtLink
           >.
         </p>
       </div>
