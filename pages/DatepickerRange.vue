@@ -1,39 +1,45 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { Datepicker } from "flowbite";
+import { ref, onMounted } from 'vue';
+import { Datepicker } from 'flowbite';
 
-import dayjs from "dayjs";
+import dayjs from 'dayjs';
 const { $datepickerJa } = useNuxtApp();
 
 // FlowbiteのDatepickerに日本語ロケールを設定
-import("flowbite-datepicker").then((module) => {
+import('flowbite-datepicker').then((module) => {
   (module.Datepicker as any).locales.ja = $datepickerJa(); // 日本語ロケールを設定
 });
 
-const field_1 = ref("");
-const field_2 = ref("");
-const startDate = ref("開始日");
-const deadline = ref("終了日");
+const field_1 = ref('');
+const field_2 = ref('');
+const startDate = ref('開始日');
+const deadline = ref('終了日');
 
 onMounted(async () => {
   useFlowbite(() => {
     // カレンダー開始日と期限の要素を取得
     const dateRangePicker = document.querySelector(
-      "#date-range-picker"
+      '#date-range-picker'
+    ) as HTMLElement;
+    const datepickerStartDate = document.querySelector(
+      '#datepicker-startDate'
+    ) as HTMLElement;
+    const datepickerDeadLine = document.querySelector(
+      '#datepicker-deadline'
     ) as HTMLElement;
 
     // カレンダーオプション
     const options = {
       defaultDatepickerId: null,
       autohide: true,
-      format: "yyyy/mm/dd",
+      format: 'yyyy/mm/dd',
       maxDate: null,
       minDate: null,
-      orientation: "bottom",
+      orientation: 'bottom',
       buttons: true,
       autoSelectToday: 1, // 今日の日付を選択
       title: null,
-      language: "ja",
+      language: 'ja',
       rangePicker: true, // 選択範囲のカレンダーを表示
       onShow: () => {},
       onHide: () => {},
@@ -45,57 +51,20 @@ onMounted(async () => {
       override: true,
     });
 
-    // カレンダー要素を取得
-    // 同じクラス名のため、判別できないので、querySelectorAllで取得し、インデックスで指定
-    const dateRangePicker_0 = document.querySelectorAll(
-      ".datepicker-picker"
-    )[0] as HTMLElement;
-    const dateRangePicker_1 = document.querySelectorAll(
-      ".datepicker-picker"
-    )[1] as HTMLElement;
-
-    // カレンダーの状態をobserverで管理
-    // TODO:他に方法があればそちらを採用
-    setDate(startDate, dateRangePicker_0);
-    setDate(deadline, dateRangePicker_1);
-
-    function setDate(valueRef: { value: string }, element: HTMLElement) {
-      const observer = new MutationObserver((mutationsList, observer) => {
-        for (let mutation of mutationsList) {
-          if (
-            mutation.type === "attributes" &&
-            mutation.attributeName === "class"
-          ) {
-            const targetCell = mutation.target as HTMLElement;
-
-            if (targetCell.classList.contains("focused")) {
-              const selectDay = dayjs(Number(targetCell.dataset.date)).format(
-                "YYYY/MM/DD"
-              );
-              valueRef.value = selectDay;
-            }
-          }
-        }
-      });
-      observer.observe(element, {
-        attributes: true, // 属性の変更を監視
-        childList: true, // 子ノードの変更を監視
-        subtree: true, // 子孫ノードの変更を監視
-      });
-    }
-
-    // カレンダーのクリアが押されたときの処理
-    const datePickerClearBtn = document.querySelectorAll(
-      ".datepicker-footer .clear-btn"
-    );
-
-    if (datePickerClearBtn.length === 0) return;
-    datePickerClearBtn.forEach((btn) => {
-      btn.addEventListener("click", () => {
-        startDate.value = "";
-        deadline.value = "";
-      });
+    datepickerStartDate.addEventListener('changeDate', (event: Event) => {
+      const changeDateEvent = event as CustomEvent<{
+        datepicker: { getDate(format: string): string };
+      }>;
+      startDate.value = changeDateEvent.detail.datepicker.getDate('yyyy/mm/dd');
     });
+
+    datepickerDeadLine.addEventListener('changeDate', (event: Event) => {
+      const changeDateEvent = event as CustomEvent<{
+        datepicker: { getDate(format: string): string };
+      }>;
+      deadline.value = changeDateEvent.detail.datepicker.getDate('yyyy/mm/dd');
+    });
+
   });
 });
 </script>
@@ -106,7 +75,9 @@ onMounted(async () => {
       <h1 class="mb-2 w-full max-w-2xl mx-auto my-2 text-3xl font-bold">
         サンプルフォーム(rangePicker)
       </h1>
-      <p class="mb-8 w-full max-w-2xl mx-auto my-12 ">rangePickerオプションで期間を指定できるカレンダーを設置</p>
+      <p class="mb-8 w-full max-w-2xl mx-auto my-12">
+        rangePickerオプションで期間を指定できるカレンダーを設置
+      </p>
       <section class="mx-auto mb-8 w-full max-w-2xl">
         <h2
           class="mb-4 text-xl font-semibold text-gray-800 dark:border-gray-600 dark:text-white"
