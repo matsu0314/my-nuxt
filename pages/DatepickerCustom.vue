@@ -12,8 +12,8 @@ import('flowbite-datepicker').then((module) => {
 
 const field_1 = ref('');
 const field_2 = ref('');
-const startDate = ref('カレンダー１');
-const deadline = ref('カレンダー２');
+const startDate = ref('');
+const deadline = ref('');
 
 onMounted(async () => {
   useFlowbite(() => {
@@ -54,6 +54,12 @@ onMounted(async () => {
       id: `datepicker-deadLine`,
       override: true,
     });
+
+    datepickerStartDate.addEventListener('changeView', (event) => {
+      console.log(event)
+      console.log("test")
+    })
+
 
     datepickerStartDate.addEventListener('changeDate', (event: Event) => {
       const changeDateEvent = event as CustomEvent<{
@@ -139,10 +145,10 @@ onMounted(async () => {
                 />
               </svg>
             </div>
-            <!-- TODO:v-model、startDateが機能しない -->
             <input
               id="datepicker-startDate"
               v-model="startDate"
+              readonly
               type="text"
               class="datepicker bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="日付を選択してください"
@@ -165,10 +171,10 @@ onMounted(async () => {
                 />
               </svg>
             </div>
-            <!-- TODO:v-model、deadlineが機能しない -->
             <input
               id="datepicker-deadline"
               v-model="deadline"
+              readonly
               type="text"
               class="datepicker bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="日付を選択してください"
