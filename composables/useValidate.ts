@@ -1,16 +1,11 @@
 // NOTE: state
 const errors = ref<Map<string, string>>(new Map());
 
-// バリデーションリスト
-// TODO: 別ファイルで管理した方が良い?
-export const validateItemList = {
-  userName: 'お名前',
-  userKana: 'カナ',
-  telValue: '電話番号',
-  mailValue: 'メールアドレス',
-};
-// バリデーションリストの型定義
-export type ValidateItemList = typeof validateItemList;
+// 注文内容の値を管理
+const orderItemValue = ref({
+  name: '',
+  num: '',
+});
 
 export const useSearchFormError = () => {
   // NOTE: getters
@@ -48,44 +43,78 @@ export const useSearchFormError = () => {
 export const useJudgeFormError = ({
   id,
   form,
+  label,
 }: {
-  id: keyof ValidateItemList;
+  id: string;
   form: string;
+  label?: string;
 }) => {
+  // エラーメッセージをリセット
   useSearchFormError().deleteError(id);
   // trueにすると未入力判定が除外される
-  let isHasError = false;
+  let isJudgementEmpty = false;
 
+  // カナ判定
   if (['userKana'].includes(id)) {
     if (form.trim() !== '' && checkError().name.katakana(form)) {
       useSearchFormError().setErrorText(id, errorText.name.katakana);
-      isHasError = true;
+      // カナのエラーがある場合、未入力エラー除外
+      isJudgementEmpty = true;
     }
   }
-
+  // 電話番号判定
   if (['telValue'].includes(id)) {
+    // 必須項目でないので、未入力エラー除外
+    isJudgementEmpty = true;
+    // 入力値が数字以外だったらエラーを設定
     if (form.trim() !== '' && checkError().number.number(form)) {
       useSearchFormError().setErrorText(id, errorText.number.number);
     }
-    // TELは必須項目でないので、未入力エラー除外
-    isHasError = true;
   }
+  // メールアドレス判定
   if (['mailValue'].includes(id)) {
     if (form.trim() !== '' && checkError().mail.correct(form)) {
       useSearchFormError().setErrorText(id, errorText.mail.correct);
-      isHasError = true;
+      isJudgementEmpty = true;
+    }
+  }
+  // 注文内容の判定
+  if (['orderItemName'].includes(id)) {
+    // 必須項目でないので、未入力エラー除外
+    isJudgementEmpty = true;
+    // 商品の入力値を更新
+    orderItemValue.value.name = form;
+    // 商品が選択されておらず、個数が入力されている場合、エラーを表示する
+    if (form.trim() === '' && orderItemValue.value.num) {
+      useSearchFormError().setErrorText(id, errorText.input.correct);
+    }
+  }
+  // 注文個数の判定
+  if (['orderItemNum'].includes(id)) {
+    // 必須項目でないので、未入力エラー除外
+    isJudgementEmpty = true;
+    // 入力値を更新
+    orderItemValue.value.num = form;
+    // 数量が未入力で、商品が選択されている場合、エラーを設定
+    if (form.trim() === '' && orderItemValue.value.name) {
+      useSearchFormError().setErrorText(id, errorText.input.correct);
+    }
+    // 入力値が数字以外だったらエラーを設定
+    if (form.trim() !== '' && checkError().number.number(form)) {
+      orderItemValue.value.num = form;
+      useSearchFormError().setErrorText(id, errorText.number.number);
     }
   }
 
   // 未入力エラー
-  if (!form.trim() && !isHasError) {
+  if (!form.trim() && !isJudgementEmpty) {
     if (checkError().input.correct(form)) {
+      const errorLabel = label ? `${label}は` : '';
       useSearchFormError().setErrorText(
         id,
-        validateItemList[id] + 'は' + errorText.input.correct
+        errorLabel + errorText.input.correct
       );
     }
-    isHasError = true;
   }
 };
 const checkError = () => {

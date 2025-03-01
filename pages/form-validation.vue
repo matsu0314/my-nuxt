@@ -3,21 +3,37 @@ const userName = ref('');
 const userKana = ref('');
 const telValue = ref('');
 const mailValue = ref('');
+const orderItemName = ref('');
+const orderItemNum = ref('');
 const memo = ref('');
 
+console.log(orderItemName);
+console.log(orderItemNum);
+
 // バリデーション判定の関数
-const judgeForm = ({ id, form }: { id: string; form: string }) => {
-  // TODO:TypeScriptのエラーの解決法を調べる
-  useJudgeFormError({ id, form });
+const judgeForm = ({
+  id,
+  form,
+  label,
+}: {
+  id: string;
+  form: string;
+  label?: string;
+}) => {
+  useJudgeFormError({ id, form, label });
 };
 
 const handleSubmit = () => {
-  // バリデーションチェック
-  const keys = Object.keys(validateItemList);
-  keys.forEach((key) => {
-    // TODO: evalの使用は推奨されてない？他の方法があれば
-    judgeForm({ id: key, form: eval(key).value });
+  judgeForm({ id: 'userName', form: userName.value, label: 'お名前' });
+  judgeForm({
+    id: 'mailValue',
+    form: mailValue.value,
+    label: 'メールアドレス',
   });
+  judgeForm({ id: 'telValue', form: telValue.value, label: '電話番号' });
+  judgeForm({ id: 'userKana', form: userKana.value, label: 'カナ' });
+  judgeForm({ id: 'orderItemName', form: orderItemName.value, label: '注文内容' });
+  judgeForm({ id: 'orderItemNum', form: orderItemNum.value, label: '個数' });
 
   // エラーがなければデータを送信
   if (useSearchFormError().hasErrors()) return;
@@ -28,8 +44,9 @@ const handleSubmit = () => {
   userKana: ${userKana.value},
   telValue: ${telValue.value},
   mailValue: ${mailValue.value},
-  memo: ${memo.value},\n
-  
+  orderItemName: ${orderItemName.value},
+  orderItemNum: ${orderItemNum.value},
+  memo: ${memo.value}
   `);
 };
 </script>
@@ -92,6 +109,45 @@ const handleSubmit = () => {
       >
         {{ useSearchFormError().getError('mailValue') }}
       </div>
+      <br />
+      注文内容<br />
+      <!-- TODO:必須項目ではないが、商品、数量どちらかが入力されていた場合、必須項目になる -->
+      <div class="flex items-top">
+        <div class="mr-4">
+          <select
+            v-model="orderItemName"
+            class="w-full bg-gray-50 mb-2 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          >
+            <option value="">選択してください</option>
+            <option value="商品１">商品１</option>
+            <option value="商品２">商品２</option>
+            <option value="商品３">商品３</option>
+          </select>
+          <div
+            v-if="useSearchFormError().getError('orderItemName')"
+            class="text-red-500 text-xs"
+          >
+            {{ useSearchFormError().getError('orderItemName') }}
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center">
+            <input
+              v-model="orderItemNum"
+              placeholder="例）3"
+              class="w-full rounded-lg border mb-2 border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+            /><span class="m-2">個</span>
+          </div>
+
+          <div
+            v-if="useSearchFormError().getError('orderItemNum')"
+            class="text-red-500 text-xs"
+          >
+            {{ useSearchFormError().getError('orderItemNum') }}
+          </div>
+        </div>
+      </div>
+
       <br />
       メモ<br />
       <textarea
