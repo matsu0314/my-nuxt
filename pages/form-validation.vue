@@ -7,33 +7,43 @@ const orderItemName = ref('');
 const orderItemNum = ref('');
 const memo = ref('');
 
-console.log(orderItemName);
-console.log(orderItemNum);
-
-// バリデーション判定の関数
-const judgeForm = ({
-  id,
-  form,
-  label,
-}: {
-  id: string;
-  form: string;
-  label?: string;
-}) => {
-  useJudgeFormError({ id, form, label });
-};
 
 const handleSubmit = () => {
-  judgeForm({ id: 'userName', form: userName.value, label: 'お名前' });
-  judgeForm({
+  useJudgeFormError({ id: 'userName', form: userName.value, label: 'お名前' });
+  // バリデーション判定の関数
+  useJudgeFormError({
     id: 'mailValue',
     form: mailValue.value,
     label: 'メールアドレス',
+    type: 'mail',
   });
-  judgeForm({ id: 'telValue', form: telValue.value, label: '電話番号' });
-  judgeForm({ id: 'userKana', form: userKana.value, label: 'カナ' });
-  judgeForm({ id: 'orderItemName', form: orderItemName.value, label: '注文内容' });
-  judgeForm({ id: 'orderItemNum', form: orderItemNum.value, label: '個数' });
+
+  useJudgeFormError({
+    id: 'telValue',
+    form: telValue.value,
+    label: '電話番号',
+    type: 'number',
+  });
+  useJudgeFormError({
+    id: 'userKana',
+    form: userKana.value,
+    label: 'カナ',
+    type: 'kana',
+  });
+  // グループバリデーション判定の関数
+  useJudgeGroupError([
+    {
+      id: 'orderItemName',
+      form: orderItemName.value,
+      label: '注文内容',
+    },
+    {
+      id: 'orderItemNum',
+      form: orderItemNum.value,
+      label: '個数',
+      type: 'number',
+    },
+  ]);
 
   // エラーがなければデータを送信
   if (useSearchFormError().hasErrors()) return;

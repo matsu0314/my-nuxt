@@ -1,11 +1,15 @@
 // NOTE: state
 const errors = ref<Map<string, string>>(new Map());
 
-// 注文内容の値を管理
-const orderItemValue = ref({
-  name: '',
-  num: '',
-});
+type JudgeFormType = 'kana' | 'mail' | 'number' | undefined;
+
+type JudgeFormArgs = {
+  id: string;
+  form: string;
+  label?: string;
+  type?: JudgeFormType;
+  require?: boolean;
+};
 
 export const useSearchFormError = () => {
   // NOTE: getters
@@ -40,83 +44,122 @@ export const useSearchFormError = () => {
     resetErrors,
   };
 };
+
 export const useJudgeFormError = ({
   id,
   form,
   label,
-}: {
-  id: string;
-  form: string;
-  label?: string;
-}) => {
+  type,
+  require = true,
+}: JudgeFormArgs) => {
   // エラーメッセージをリセット
   useSearchFormError().deleteError(id);
-  // trueにすると未入力判定が除外される
-  let isJudgementEmpty = false;
-
-  // カナ判定
-  if (['userKana'].includes(id)) {
-    if (form.trim() !== '' && checkError().name.katakana(form)) {
-      useSearchFormError().setErrorText(id, errorText.name.katakana);
-      // カナのエラーがある場合、未入力エラー除外
-      isJudgementEmpty = true;
-    }
-  }
-  // 電話番号判定
-  if (['telValue'].includes(id)) {
-    // 必須項目でないので、未入力エラー除外
-    isJudgementEmpty = true;
-    // 入力値が数字以外だったらエラーを設定
-    if (form.trim() !== '' && checkError().number.number(form)) {
-      useSearchFormError().setErrorText(id, errorText.number.number);
-    }
-  }
-  // メールアドレス判定
-  if (['mailValue'].includes(id)) {
-    if (form.trim() !== '' && checkError().mail.correct(form)) {
-      useSearchFormError().setErrorText(id, errorText.mail.correct);
-      isJudgementEmpty = true;
-    }
-  }
-  // 注文内容の判定
-  if (['orderItemName'].includes(id)) {
-    // 必須項目でないので、未入力エラー除外
-    isJudgementEmpty = true;
-    // 商品の入力値を更新
-    orderItemValue.value.name = form;
-    // 商品が選択されておらず、個数が入力されている場合、エラーを表示する
-    if (form.trim() === '' && orderItemValue.value.num) {
-      useSearchFormError().setErrorText(id, errorText.input.correct);
-    }
-  }
-  // 注文個数の判定
-  if (['orderItemNum'].includes(id)) {
-    // 必須項目でないので、未入力エラー除外
-    isJudgementEmpty = true;
-    // 入力値を更新
-    orderItemValue.value.num = form;
-    // 数量が未入力で、商品が選択されている場合、エラーを設定
-    if (form.trim() === '' && orderItemValue.value.name) {
-      useSearchFormError().setErrorText(id, errorText.input.correct);
-    }
-    // 入力値が数字以外だったらエラーを設定
-    if (form.trim() !== '' && checkError().number.number(form)) {
-      orderItemValue.value.num = form;
-      useSearchFormError().setErrorText(id, errorText.number.number);
-    }
-  }
-
+  // タイプ別バリデーション実行
+  typeValidation(type, form, id);
   // 未入力エラー
-  if (!form.trim() && !isJudgementEmpty) {
-    if (checkError().input.correct(form)) {
-      const errorLabel = label ? `${label}は` : '';
-      useSearchFormError().setErrorText(
-        id,
-        errorLabel + errorText.input.correct
-      );
-    }
+  if (require) {
+    judgeEmpty(id, form, label);
   }
 };
+
+export const useJudgeGroupError = (formObj: JudgeFormArgs[]) => {
+  formObj.forEach((item) => {
+    // エラーメッセージをリセット
+    useSearchFormError().deleteError(item.id);
+
+    // 全てのフィールドに対してバリデーション実行
+    const isInputDataValid = areAllFieldsConsistent(formObj);
+
+    // タイプ別バリデーション実行
+    typeValidation(item.type, item.form, item.id);
+    // 未入力エラー
+    if (item.require) {
+      judgeEmpty(item.id, item.form, item.label);
+    }
+
+    // どれか1つでも値があり、他の項目に空文字が含まれている場合
+    if (!isInputDataValid) {
+      judgeEmpty(item.id, item.form, item.label);
+    }
+  });
+};
+
+
+// 未入力エラー
+const judgeEmpty = (id: string, form: string, label?: string) => {
+  if (checkError().input.correct(form)) {
+    const errorLabel = label ? `${label}は` : '';
+    useSearchFormError().setErrorText(id, errorLabel + errorText.input.correct);
+  }
+};
+// タイプ別エラー
+const typeValidation = (
+  type: JudgeFormType, 
+  form: string, 
+  id: string
+) => {
+  if (!type) return;
+  
+  // カナエラー
+  if (type === 'kana') {
+    validationFunc().kana(form, id);
+  }
+  // メールエラー
+  if (type === 'mail') {
+    validationFunc().mail(form, id);
+  }
+  // 数字エラー
+  if (type === 'number') {
+    validationFunc().number(form, id);
+  }
+}
+
+// どれか1つでも値があった場合、他の項目に空文字が含まれているか判定
+const areAllFieldsConsistent = (
+  forms: {
+    id: string;
+    form: string;
+    label?: string;
+    type?: 'kana' | 'number' | 'mail';
+    require?: boolean;
+  }[]
+) => {
+  // 空文字以外の値が一つでもあった場合、他のすべてのフォームが空文字でないことを確認
+  const nonEmptyCount = forms.filter((item) => item.form !== '').length;
+
+  if (nonEmptyCount === 0) {
+    // すべて空文字だった場合
+    return true;
+  }
+
+  // どれか1つでも値があった場合、他の項目に空文字が含まれていないか確認
+  return forms.every(
+    (item) => item.form !== '' || nonEmptyCount === forms.length
+  );
+};
+// タイプ別バリデーションチェック
+const validationFunc = () => {
+  return {
+    number: (form: string, id: string) => {
+      if (form.trim() !== '' && checkError().number.number(form)) {
+        useSearchFormError().setErrorText(id, errorText.number.number);
+      }
+    },
+    mail: (form: string, id: string) => {
+      if (form.trim() !== '' && checkError().mail.correct(form)) {
+        useSearchFormError().setErrorText(id, errorText.mail.correct);
+      }
+    },
+    kana: (form: string, id: string) => {
+      // カナ判定
+      if (form.trim() !== '' && checkError().name.katakana(form)) {
+        useSearchFormError().setErrorText(id, errorText.name.katakana);
+        return;
+      }
+    },
+  };
+};
+// バリデーション条件
 const checkError = () => {
   return {
     input: {
